@@ -9,8 +9,8 @@ import os
 print('hii')
 print(os.getcwd())
 print(os.listdir())
-import settings
 import data as data
+import settings
 import metrics as metrics
 import utils as utils
 from utils import readable
