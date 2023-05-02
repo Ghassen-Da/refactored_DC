@@ -8,7 +8,7 @@ from scipy.stats import mannwhitneyu
 
 def are_significantly_different(sample_1, sample_2, alpha = 0.05):
   stat, p = mannwhitneyu(sample_1, sample_2)
-  return p <= alpha
+  return p <= alpha 
 
 def empirical_f_test(data, ref_std, F_critical = 1.5):
   var_1 = np.std(data)**2
