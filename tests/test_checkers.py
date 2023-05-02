@@ -301,6 +301,8 @@ def test_biases():
     inputs_data1 = InputData(data_to_test, 'regression')
     initial_biases3 = {'conv2d/bias:0': np.ones((64,1))}
     assert pre_check_biases(initial_biases3, inputs_data1) == '''Bias of last layer should start up with the mean value'''
+    print('hi')
+    print(os.getcwd())
     dataset = pd.read_csv('data/auto-mpg.csv')
     train_dataset = dataset.sample(frac=0.8, random_state=0)
     test_dataset = dataset.drop(train_dataset.index)
