@@ -1,7 +1,7 @@
 import abc
 import numpy as np
 import tensorflow as tf
-from _settings import CLASSIFICATION_KEY, REGRESSION_KEY, EPSILON
+from settings import CLASSIFICATION_KEY, REGRESSION_KEY, EPSILON
 
 class DataLoader(object, metaclass=abc.ABCMeta):
     @abc.abstractmethod

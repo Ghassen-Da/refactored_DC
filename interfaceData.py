@@ -1,7 +1,7 @@
 import numpy as np
 import tensorflow as tf
 from tensorflow.python.training.basic_session_run_hooks import _as_graph_element
-from _settings import CLASSIFICATION_KEY, REGRESSION_KEY
+from settings import CLASSIFICATION_KEY, REGRESSION_KEY
 
 def build_data_interface(train_loader, test_loader, homogeneous):
     return Data(train_loader, test_loader, homogeneous)
