@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 import sys
-sys.path.append('/')
+sys.path.append('../')
 import settings
 import data as data
 import metrics as metrics
