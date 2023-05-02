@@ -8,6 +8,7 @@ sys.path.append('../..')
 import os
 print('hii')
 print(os.getcwd())
+print(os.listdir())
 import settings
 import data as data
 import metrics as metrics
