@@ -1,4 +1,4 @@
-from refactored_DC import metrics
+from metrics import are_significantly_different
 from refactored_DC.metadata import DNNState, InputData
 from refactored_DC.utils import readable
 import data as data
