@@ -1,3 +1,5 @@
+import sys
+sys.path.append('../')
 from metrics import are_significantly_different
 from refactored_DC.metadata import DNNState, InputData
 from refactored_DC.utils import readable
