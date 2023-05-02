@@ -3,22 +3,22 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import tensorflow as tf
-import refactored_DC.data as data
+from refactored_DC.utils import readable
+import data as data
 import refactored_DC.metrics as metrics
 import refactored_DC.utils as utils
-from refactored_DC.utils import readable
 from refactored_DC.metadata import DNNState, InputData
 import refactored_DC.interfaceData as interfaceData
-import refactored_DC.settings
+import refactored_DC.settings as settings
 
 from refactored_DC.settings import CLASSIFICATION_KEY, REGRESSION_KEY
 
 
 def pre_check_features(inputs_data):
     app_path = Path.cwd()
-    config_fpath = refactored_DC.settings.load_user_config_if_exists(app_path)
-    config = refactored_DC.settings.Config(config_fpath).pre_check
-    main_msgs = refactored_DC.settings.load_messages()
+    config_fpath = settings.load_user_config_if_exists(app_path)
+    config = settings.Config(config_fpath).pre_check
+    main_msgs = settings.load_messages()
 
 
     if inputs_data.homogeneous:
@@ -89,9 +89,9 @@ def test_features():
 
 def pre_check_targets(inputs_data):
     app_path = Path.cwd()
-    config_fpath = refactored_DC.settings.load_user_config_if_exists(app_path)
-    config = refactored_DC.settings.Config(config_fpath).pre_check
-    main_msgs = refactored_DC.settings.load_messages()
+    config_fpath = settings.load_user_config_if_exists(app_path)
+    config = settings.Config(config_fpath).pre_check
+    main_msgs = settings.load_messages()
     if inputs_data.problem_type == CLASSIFICATION_KEY:
         if inputs_data.targets_metadata['balance'] < config.data.labels_perp_min_thresh:
             msg = main_msgs['unbalanced_labels']
@@ -173,9 +173,9 @@ def test_targets():
 
 def pre_check_weights(weight_name, weight_array, activation):
     app_path = Path.cwd()
-    config_fpath = refactored_DC.settings.load_user_config_if_exists(app_path)
-    config = refactored_DC.settings.Config(config_fpath).pre_check
-    main_msgs = refactored_DC.settings.load_messages()
+    config_fpath = settings.load_user_config_if_exists(app_path)
+    config = settings.Config(config_fpath).pre_check
+    main_msgs = settings.load_messages()
     shape = weight_array.shape
     if len(shape) == 1 and shape[0] == 1:
         return 'ignored because of the shape'
@@ -230,9 +230,9 @@ def test_weights():
 
 def pre_check_biases(initial_biases, inputs_data):
     app_path = Path.cwd()
-    config_fpath = refactored_DC.settings.load_user_config_if_exists(app_path)
-    config = refactored_DC.settings.Config(config_fpath).pre_check
-    main_msgs = refactored_DC.settings.load_messages()
+    config_fpath = settings.load_user_config_if_exists(app_path)
+    config = settings.Config(config_fpath).pre_check
+    main_msgs = settings.load_messages()
     if not(initial_biases):
         return main_msgs['need_bias']
     else:
@@ -309,9 +309,9 @@ def test_biases():
 
 def pre_check_loss(losses, inputs_data, initial_loss):
     app_path = Path.cwd()
-    config_fpath = refactored_DC.settings.load_user_config_if_exists(app_path)
-    config = refactored_DC.settings.Config(config_fpath).pre_check
-    main_msgs = refactored_DC.settings.load_messages()
+    config_fpath = settings.load_user_config_if_exists(app_path)
+    config = settings.Config(config_fpath).pre_check
+    main_msgs = settings.load_messages()
     rounded_loss_rates = [round(losses[i + 1] / losses[i]) for i in range(len(losses) - 1)]
     equality_checks = sum(
         [(loss_rate == config.init_loss.size_growth_rate) for loss_rate in rounded_loss_rates])
@@ -342,9 +342,9 @@ def test_losses():
 
 def pre_check_gradients(numerical, theoretical):
     app_path = Path.cwd()
-    config_fpath = refactored_DC.settings.load_user_config_if_exists(app_path)
-    config = refactored_DC.settings.Config(config_fpath).pre_check
-    main_msgs = refactored_DC.settings.load_messages()
+    config_fpath = settings.load_user_config_if_exists(app_path)
+    config = settings.Config(config_fpath).pre_check
+    main_msgs = settings.load_messages()
     # def intermediate_function(x):
     #     return tf.convert_to_tensor(loss_value)
     # for i in range(len(weights)):
@@ -379,9 +379,9 @@ def test_gradients():
 
 def pre_check_fitting_data_capability(real_loss, real_acc, fake_loss, problem_type):
         app_path = Path.cwd()
-        config_fpath = refactored_DC.settings.load_user_config_if_exists(app_path)
-        config = refactored_DC.settings.Config(config_fpath).pre_check
-        main_msgs = refactored_DC.settings.load_messages()
+        config_fpath = settings.load_user_config_if_exists(app_path)
+        config = settings.Config(config_fpath).pre_check
+        main_msgs = settings.load_messages()
         def _loss_is_stable(loss_value):
             if np.isnan(loss_value).all():
                 print(main_msgs['nan_loss'])
