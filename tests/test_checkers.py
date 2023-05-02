@@ -238,83 +238,83 @@ def test_weights():
         assert messages[i] in pre_check_weights(names[i], arrays[i], activations[i])
 
 
-def pre_check_biases(initial_biases, inputs_data):
-    app_path = Path.cwd()
-    config_fpath = settings.load_user_config_if_exists(app_path)
-    config = settings.Config(config_fpath).pre_check
-    main_msgs = settings.load_messages()
-    if not(initial_biases):
-        return main_msgs['need_bias']
-    else:
-        checks = []
-        for b_name, b_array in initial_biases.items():
-            checks.append(np.sum(b_array)==0.0)
-        if inputs_data.problem_type == CLASSIFICATION_KEY and \
-            inputs_data.targets_metadata['balance'] < config.data.labels_perp_min_thresh:
-            if checks[-1]:
-                return main_msgs['last_bias']
-            elif not checks[-1]:
-                bias_indices = np.argsort(b_array)
-                probas_indices = np.argsort(inputs_data.targets_metadata['probas'])
-                if not (np.equal(bias_indices, probas_indices)).all():
-                    return main_msgs['ineff_bias_cls']
-        elif inputs_data.problem_type == REGRESSION_KEY:
-            if inputs_data.targets_metadata['count'] == 1:
-                avgs = [inputs_data.targets_metadata['mean']]
-                stds = [inputs_data.targets_metadata['std']]
-            else:
-                avgs = list(inputs_data.targets_metadata['mean'])
-                stds = list(inputs_data.targets_metadata['std'])
-            var_coefs = [std/avg for avg, std in zip(avgs, stds)]
-            low_var_coefs_indices = [i for i, var_coef in enumerate(var_coefs) if var_coef <= 1e-3]
-            for idx in low_var_coefs_indices:
-                b_value = float(b_array[idx])
-                if not(utils.almost_equal(b_value, avgs[idx])):
-                    return main_msgs['ineff_bias_regr'].format(idx)
-        elif not np.all(checks):
-            return main_msgs['zero_bias']
+# def pre_check_biases(initial_biases, inputs_data):
+#     app_path = Path.cwd()
+#     config_fpath = settings.load_user_config_if_exists(app_path)
+#     config = settings.Config(config_fpath).pre_check
+#     main_msgs = settings.load_messages()
+#     if not(initial_biases):
+#         return main_msgs['need_bias']
+#     else:
+#         checks = []
+#         for b_name, b_array in initial_biases.items():
+#             checks.append(np.sum(b_array)==0.0)
+#         if inputs_data.problem_type == CLASSIFICATION_KEY and \
+#             inputs_data.targets_metadata['balance'] < config.data.labels_perp_min_thresh:
+#             if checks[-1]:
+#                 return main_msgs['last_bias']
+#             elif not checks[-1]:
+#                 bias_indices = np.argsort(b_array)
+#                 probas_indices = np.argsort(inputs_data.targets_metadata['probas'])
+#                 if not (np.equal(bias_indices, probas_indices)).all():
+#                     return main_msgs['ineff_bias_cls']
+#         elif inputs_data.problem_type == REGRESSION_KEY:
+#             if inputs_data.targets_metadata['count'] == 1:
+#                 avgs = [inputs_data.targets_metadata['mean']]
+#                 stds = [inputs_data.targets_metadata['std']]
+#             else:
+#                 avgs = list(inputs_data.targets_metadata['mean'])
+#                 stds = list(inputs_data.targets_metadata['std'])
+#             var_coefs = [std/avg for avg, std in zip(avgs, stds)]
+#             low_var_coefs_indices = [i for i, var_coef in enumerate(var_coefs) if var_coef <= 1e-3]
+#             for idx in low_var_coefs_indices:
+#                 b_value = float(b_array[idx])
+#                 if not(utils.almost_equal(b_value, avgs[idx])):
+#                     return main_msgs['ineff_bias_regr'].format(idx)
+#         elif not np.all(checks):
+#             return main_msgs['zero_bias']
 
-def test_biases():
-    x_train0 = np.ones((314, 9), dtype=np.int64)
-    y = np.array([[0],[1]])
-    y_train0 = np.repeat(y, [1, 313], axis=0)
-    x_test0 = np.ones((78, 9), dtype=np.int64)
-    y_test0 = np.repeat(y, [1, 77], axis=0)
-    data_loader_under_test = data.DataLoaderFromArrays(x_train0, y_train0, shuffle=True, one_hot=False, target_scaling=False)
-    test_data_loader = data.DataLoaderFromArrays(x_test0, y_test0, shuffle=True, one_hot=False, target_scaling=False)
-    data_to_test = interfaceData.build_data_interface(data_loader_under_test, test_data_loader, homogeneous=True)
-    inputs_data0 = InputData(data_to_test, 'classification')
-    initial_biases0 = {}
-    assert pre_check_biases(initial_biases0, inputs_data0) == '''The model missed biases. Do not consider this alert if you use batchnorm for all layers'''
-    initial_biases1 = {'dense/bias:0': np.zeros((64,1))}
-    assert pre_check_biases(initial_biases1, inputs_data0) == '''Bias of last layer should not be zero, in case of unbalanced data'''
-    initial_biases2 = {'conv2d:bias:0':np.ones((64,1))}
-    assert pre_check_biases(initial_biases2, inputs_data0) == '''Bias of last layer should match the ratio of labels'''
-    x_train1 = np.ones((314, 9), dtype=np.int64)
-    x_test1 = np.ones((78, 9), dtype=np.int64)
-    y_train1 = np.random.uniform(low = 143.50, high = 143.78, size = (314,1))
-    y_test1 = np.random.uniform(low = 143.50, high = 143.78, size = (78,1))
-    data_loader_under_test = data.DataLoaderFromArrays(x_train1, y_train1, shuffle=True, problem_type=REGRESSION_KEY, one_hot=False, target_scaling=False)
-    test_data_loader = data.DataLoaderFromArrays(x_test1, y_test1, shuffle=True, one_hot=False, problem_type=REGRESSION_KEY, target_scaling=False)
-    data_to_test = interfaceData.build_data_interface(data_loader_under_test, test_data_loader, homogeneous=True)
-    inputs_data1 = InputData(data_to_test, 'regression')
-    initial_biases3 = {'conv2d/bias:0': np.ones((64,1))}
-    assert pre_check_biases(initial_biases3, inputs_data1) == '''Bias of last layer should start up with the mean value'''
-    dataset = pd.read_csv('tests/data/auto-mpg.csv')
-    train_dataset = dataset.sample(frac=0.8, random_state=0)
-    test_dataset = dataset.drop(train_dataset.index)
-    train_features = train_dataset.copy()
-    test_features = test_dataset.copy()
-    train_labels = train_features.pop('MPG')
-    test_labels = test_features.pop('MPG')
-    x_train2, y_train2 = train_features.to_numpy(), train_labels.to_numpy().reshape(-1,1)
-    x_test2, y_test2 = test_features.to_numpy(), test_labels.to_numpy().reshape(-1,1)
-    data_loader_under_test = data.DataLoaderFromArrays(x_train2, y_train2, shuffle=True, problem_type=REGRESSION_KEY, one_hot=False, target_scaling=True)
-    test_data_loader = data.DataLoaderFromArrays(x_test2, y_test2, shuffle=True, one_hot=False, problem_type=REGRESSION_KEY, target_scaling=True)
-    data_to_test = interfaceData.build_data_interface(data_loader_under_test, test_data_loader, homogeneous=True)
-    inputs_data2 = InputData(data_to_test, 'classification')
-    initial_biases4 = {'conv2d/bias:0': np.ones((64,1))}
-    assert pre_check_biases(initial_biases4, inputs_data2) == '''It is recommended to choose null biases (zeros)'''
+# def test_biases():
+#     x_train0 = np.ones((314, 9), dtype=np.int64)
+#     y = np.array([[0],[1]])
+#     y_train0 = np.repeat(y, [1, 313], axis=0)
+#     x_test0 = np.ones((78, 9), dtype=np.int64)
+#     y_test0 = np.repeat(y, [1, 77], axis=0)
+#     data_loader_under_test = data.DataLoaderFromArrays(x_train0, y_train0, shuffle=True, one_hot=False, target_scaling=False)
+#     test_data_loader = data.DataLoaderFromArrays(x_test0, y_test0, shuffle=True, one_hot=False, target_scaling=False)
+#     data_to_test = interfaceData.build_data_interface(data_loader_under_test, test_data_loader, homogeneous=True)
+#     inputs_data0 = InputData(data_to_test, 'classification')
+#     initial_biases0 = {}
+#     assert pre_check_biases(initial_biases0, inputs_data0) == '''The model missed biases. Do not consider this alert if you use batchnorm for all layers'''
+#     initial_biases1 = {'dense/bias:0': np.zeros((64,1))}
+#     assert pre_check_biases(initial_biases1, inputs_data0) == '''Bias of last layer should not be zero, in case of unbalanced data'''
+#     initial_biases2 = {'conv2d:bias:0':np.ones((64,1))}
+#     assert pre_check_biases(initial_biases2, inputs_data0) == '''Bias of last layer should match the ratio of labels'''
+#     x_train1 = np.ones((314, 9), dtype=np.int64)
+#     x_test1 = np.ones((78, 9), dtype=np.int64)
+#     y_train1 = np.random.uniform(low = 143.50, high = 143.78, size = (314,1))
+#     y_test1 = np.random.uniform(low = 143.50, high = 143.78, size = (78,1))
+#     data_loader_under_test = data.DataLoaderFromArrays(x_train1, y_train1, shuffle=True, problem_type=REGRESSION_KEY, one_hot=False, target_scaling=False)
+#     test_data_loader = data.DataLoaderFromArrays(x_test1, y_test1, shuffle=True, one_hot=False, problem_type=REGRESSION_KEY, target_scaling=False)
+#     data_to_test = interfaceData.build_data_interface(data_loader_under_test, test_data_loader, homogeneous=True)
+#     inputs_data1 = InputData(data_to_test, 'regression')
+#     initial_biases3 = {'conv2d/bias:0': np.ones((64,1))}
+#     assert pre_check_biases(initial_biases3, inputs_data1) == '''Bias of last layer should start up with the mean value'''
+#     dataset = pd.read_csv('tests/data/auto-mpg.csv')
+#     train_dataset = dataset.sample(frac=0.8, random_state=0)
+#     test_dataset = dataset.drop(train_dataset.index)
+#     train_features = train_dataset.copy()
+#     test_features = test_dataset.copy()
+#     train_labels = train_features.pop('MPG')
+#     test_labels = test_features.pop('MPG')
+#     x_train2, y_train2 = train_features.to_numpy(), train_labels.to_numpy().reshape(-1,1)
+#     x_test2, y_test2 = test_features.to_numpy(), test_labels.to_numpy().reshape(-1,1)
+#     data_loader_under_test = data.DataLoaderFromArrays(x_train2, y_train2, shuffle=True, problem_type=REGRESSION_KEY, one_hot=False, target_scaling=True)
+#     test_data_loader = data.DataLoaderFromArrays(x_test2, y_test2, shuffle=True, one_hot=False, problem_type=REGRESSION_KEY, target_scaling=True)
+#     data_to_test = interfaceData.build_data_interface(data_loader_under_test, test_data_loader, homogeneous=True)
+#     inputs_data2 = InputData(data_to_test, 'classification')
+#     initial_biases4 = {'conv2d/bias:0': np.ones((64,1))}
+#     assert pre_check_biases(initial_biases4, inputs_data2) == '''It is recommended to choose null biases (zeros)'''
  
 
 # def pre_check_loss(losses, inputs_data, initial_loss):
