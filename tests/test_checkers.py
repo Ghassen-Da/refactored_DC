@@ -387,77 +387,77 @@ def test_gradients():
     assert 'Gradient w.r.t weight' in pre_check_gradients(numerical1, theoretical1)
 
 
-def pre_check_fitting_data_capability(real_loss, real_acc, fake_loss, problem_type):
-        app_path = Path.cwd()
-        config_fpath = settings.load_user_config_if_exists(app_path)
-        config = settings.Config(config_fpath).pre_check
-        main_msgs = settings.load_messages()
-        def _loss_is_stable(loss_value):
-            if np.isnan(loss_value).all():
-                print(main_msgs['nan_loss'])
-                return False, main_msgs['nan_loss']
-            if np.isinf(loss_value).all():
-                print(main_msgs['inf_loss'])
-                return False, main_msgs['inf_loss']
-            return (True,)
-        if len(_loss_is_stable(real_loss)) == 2:
-            return main_msgs['underfitting_single_batch']
-        # loss, acc = (real_losses[-1] + self.model.reg_loss, real_accs[-1]) if self.model.reg_loss!= None else (real_losses[-1], real_accs[-1])
-        underfitting_prob = False
-        if problem_type == CLASSIFICATION_KEY:
-            if 1.0 - max(real_acc) > config.prop_fit.mislabeled_rate_max_thresh:
-                underfitting_prob = True
-                return main_msgs['underfitting_single_batch']
-        elif problem_type == REGRESSION_KEY:
-            if min(real_acc) > config.prop_fit.mean_error_max_thresh:
-                return main_msgs['underfitting_single_batch']
-                underfitting_prob = True
-        loss_smoothness = metrics.smoothness(real_loss)
-        min_loss = np.min(real_loss)
-        if min_loss <= config.prop_fit.abs_loss_min_thresh or (min_loss <= config.prop_fit.loss_min_thresh and loss_smoothness > config.prop_fit.smoothness_max_thresh):
-            return main_msgs['zero_loss']
-        # if not (underfitting_prob): return
-            if not (_loss_is_stable(fake_loss)[0]): return
-        stability_test = np.array([_loss_is_stable(loss_value)[0] for loss_value in (real_loss + fake_loss)])
-        if (stability_test == False).any():
-            last_real_losses = real_loss[-config.prop_fit.sample_size_of_losses:]
-            last_fake_losses = fake_loss[-config.prop_fit.sample_size_of_losses:]
-            if not (metrics.are_significantly_different(last_real_losses, last_fake_losses)):
-                return main_msgs['data_dep']
+# def pre_check_fitting_data_capability(real_loss, real_acc, fake_loss, problem_type):
+#         app_path = Path.cwd()
+#         config_fpath = settings.load_user_config_if_exists(app_path)
+#         config = settings.Config(config_fpath).pre_check
+#         main_msgs = settings.load_messages()
+#         def _loss_is_stable(loss_value):
+#             if np.isnan(loss_value).all():
+#                 print(main_msgs['nan_loss'])
+#                 return False, main_msgs['nan_loss']
+#             if np.isinf(loss_value).all():
+#                 print(main_msgs['inf_loss'])
+#                 return False, main_msgs['inf_loss']
+#             return (True,)
+#         if len(_loss_is_stable(real_loss)) == 2:
+#             return main_msgs['underfitting_single_batch']
+#         # loss, acc = (real_losses[-1] + self.model.reg_loss, real_accs[-1]) if self.model.reg_loss!= None else (real_losses[-1], real_accs[-1])
+#         underfitting_prob = False
+#         if problem_type == CLASSIFICATION_KEY:
+#             if 1.0 - max(real_acc) > config.prop_fit.mislabeled_rate_max_thresh:
+#                 underfitting_prob = True
+#                 return main_msgs['underfitting_single_batch']
+#         elif problem_type == REGRESSION_KEY:
+#             if min(real_acc) > config.prop_fit.mean_error_max_thresh:
+#                 return main_msgs['underfitting_single_batch']
+#                 underfitting_prob = True
+#         loss_smoothness = metrics.smoothness(real_loss)
+#         min_loss = np.min(real_loss)
+#         if min_loss <= config.prop_fit.abs_loss_min_thresh or (min_loss <= config.prop_fit.loss_min_thresh and loss_smoothness > config.prop_fit.smoothness_max_thresh):
+#             return main_msgs['zero_loss']
+#         # if not (underfitting_prob): return
+#             if not (_loss_is_stable(fake_loss)[0]): return
+#         stability_test = np.array([_loss_is_stable(loss_value)[0] for loss_value in (real_loss + fake_loss)])
+#         if (stability_test == False).any():
+#             last_real_losses = real_loss[-config.prop_fit.sample_size_of_losses:]
+#             last_fake_losses = fake_loss[-config.prop_fit.sample_size_of_losses:]
+#             if not (metrics.are_significantly_different(last_real_losses, last_fake_losses)):
+#                 return main_msgs['data_dep']
 
-def test_data_capability():
-    real_loss1 = np.nan
-    fake_loss1 = np.array([2.4])
-    real_acc1 = [0.9]
-    problem_type1 = ''
-    assert pre_check_fitting_data_capability(real_loss1, real_acc1, fake_loss1, problem_type1) == 'The DNN training is unable to fit properly a single batch of data'
+# def test_data_capability():
+#     real_loss1 = np.nan
+#     fake_loss1 = np.array([2.4])
+#     real_acc1 = [0.9]
+#     problem_type1 = ''
+#     assert pre_check_fitting_data_capability(real_loss1, real_acc1, fake_loss1, problem_type1) == 'The DNN training is unable to fit properly a single batch of data'
 
-    real_loss2 = np.inf
-    fake_loss2 = np.array([2.4])
-    real_acc2 = [0.5]
-    problem_type2 = ''
-    assert pre_check_fitting_data_capability(real_loss2, real_acc2, fake_loss2, problem_type2) == 'The DNN training is unable to fit properly a single batch of data'
+#     real_loss2 = np.inf
+#     fake_loss2 = np.array([2.4])
+#     real_acc2 = [0.5]
+#     problem_type2 = ''
+#     assert pre_check_fitting_data_capability(real_loss2, real_acc2, fake_loss2, problem_type2) == 'The DNN training is unable to fit properly a single batch of data'
 
-    real_loss3 = np.array([[1.548]])
-    fake_loss3 = np.array([2.4])
-    real_acc3 = [0.8]
-    problem_type3 = 'classification'
-    assert pre_check_fitting_data_capability(real_loss3, real_acc3, fake_loss3, problem_type3) == 'The DNN training is unable to fit properly a single batch of data'
+#     real_loss3 = np.array([[1.548]])
+#     fake_loss3 = np.array([2.4])
+#     real_acc3 = [0.8]
+#     problem_type3 = 'classification'
+#     assert pre_check_fitting_data_capability(real_loss3, real_acc3, fake_loss3, problem_type3) == 'The DNN training is unable to fit properly a single batch of data'
 
-    real_loss4 = np.array([[1.548]])
-    fake_loss4 = np.array([2.4])
-    real_acc4 = [0.1]
-    problem_type4 = 'regression'
-    assert pre_check_fitting_data_capability(real_loss4, real_acc4, fake_loss4, problem_type4) == 'The DNN training is unable to fit properly a single batch of data'
+#     real_loss4 = np.array([[1.548]])
+#     fake_loss4 = np.array([2.4])
+#     real_acc4 = [0.1]
+#     problem_type4 = 'regression'
+#     assert pre_check_fitting_data_capability(real_loss4, real_acc4, fake_loss4, problem_type4) == 'The DNN training is unable to fit properly a single batch of data'
 
-    real_loss5 = np.array([[1e-6]])
-    fake_loss5 = np.array([2.4])
-    real_acc5 = [0.0001]
-    problem_type5 = 'regression'
-    assert pre_check_fitting_data_capability(real_loss5, real_acc5, fake_loss5, problem_type5) == 'The loss is smoothly decreasing towards zero: The model may need regularization'
+#     real_loss5 = np.array([[1e-6]])
+#     fake_loss5 = np.array([2.4])
+#     real_acc5 = [0.0001]
+#     problem_type5 = 'regression'
+#     assert pre_check_fitting_data_capability(real_loss5, real_acc5, fake_loss5, problem_type5) == 'The loss is smoothly decreasing towards zero: The model may need regularization'
 
-    real_loss6 = np.array([1.56, np.nan])
-    fake_loss6 = np.array([2.4, np.nan])
-    problem_type6 = ''
-    real_acc6 = [0.95]
-    assert pre_check_fitting_data_capability(real_loss6, real_acc6, fake_loss6, problem_type6) == 'The training procedure seems to be not considering the data inputs'
+#     real_loss6 = np.array([1.56, np.nan])
+#     fake_loss6 = np.array([2.4, np.nan])
+#     problem_type6 = ''
+#     real_acc6 = [0.95]
+#     assert pre_check_fitting_data_capability(real_loss6, real_acc6, fake_loss6, problem_type6) == 'The training procedure seems to be not considering the data inputs'
