@@ -3,15 +3,15 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import tensorflow as tf
-import SWAT.deep_checker.settings as settings
-import SWAT.deep_checker.data as data
-import SWAT.deep_checker.metrics as metrics
-import SWAT.deep_checker.utils as utils
-from SWAT.deep_checker.utils import readable
-from SWAT.deep_checker.metadata import DNNState, InputData
-import SWAT.deep_checker.interfaceData as interfaceData
+import settings as settings
+import data as data
+import metrics as metrics
+import utils as utils
+from utils import readable
+from metadata import DNNState, InputData
+import interfaceData as interfaceData
 
-from SWAT.deep_checker.settings import CLASSIFICATION_KEY, REGRESSION_KEY
+from settings import CLASSIFICATION_KEY, REGRESSION_KEY
 
 
 def pre_check_features(inputs_data):
