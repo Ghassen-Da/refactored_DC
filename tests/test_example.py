@@ -1,4 +1,4 @@
-import refactored_DC.metrics
+from  ...refactored_DC.metrics import are_significantly_different
 
 
 # content of test_sample.py
