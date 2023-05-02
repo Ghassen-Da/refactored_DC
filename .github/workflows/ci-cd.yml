@@ -31,7 +31,9 @@ jobs:
     #     ruff --format=github --target-version=py39 .
 
     - name: Run tests and collect coverage
-      run: pytest --cov .
+      run: |
+        pip install pytest-cov
+        pytest --cov .
 
     - name: Upload coverage reports to Codecov
       run: |
