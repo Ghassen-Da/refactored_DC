@@ -87,87 +87,87 @@ def test_features():
             assert pre_check_features(inputs_data) == 'Features seem to be unnormalized'
 
 
-# def pre_check_targets(inputs_data):
-#     app_path = Path.cwd()
-#     config_fpath = settings.load_user_config_if_exists(app_path)
-#     config = settings.Config(config_fpath).pre_check
-#     main_msgs = settings.load_messages()
-#     if inputs_data.problem_type == CLASSIFICATION_KEY:
-#         if inputs_data.targets_metadata['balance'] < config.data.labels_perp_min_thresh:
-#             msg = main_msgs['unbalanced_labels']
-#             return msg
-#     elif inputs_data.problem_type == REGRESSION_KEY:
-#         if inputs_data.targets_metadata['count'] == 1:
-#             mas = [inputs_data.targets_metadata['max']]
-#             mis = [inputs_data.targets_metadata['min']]
-#             avgs = [inputs_data.targets_metadata['mean']]
-#             stds = [inputs_data.targets_metadata['std']]
-#         else:
-#             mas = list(inputs_data.targets_metadata['max'])
-#             mis = list(inputs_data.targets_metadata['min'])
-#             avgs = list(inputs_data.targets_metadata['mean'])
-#             stds = list(inputs_data.targets_metadata['std'])
-#         for idx in range(len(mas)):
-#             if utils.almost_equal(stds[idx], 0.0):
-#                 msg = main_msgs['targets_constant'] if len(mas) == 1 else main_msgs['target_constant'].format(idx)
-#                 return msg
-#             elif any([utils.almost_equal(mas[idx], data_max) for data_max in config.data.normalized_data_maxs]) and \
-#             any([utils.almost_equal(mis[idx], data_min) for data_min in config.data.normalized_data_mins]):
-#                 msg = 'everything is clear'
-#                 return msg
-#             elif not (utils.almost_equal(stds[idx], 1.0) and utils.almost_equal(avgs[idx], 0.0)):
-#                 msg = main_msgs['targets_unnormalized'] if len(mas) == 1 else main_msgs['target_unnormalized'].format(idx)
-#                 return msg
+def pre_check_targets(inputs_data):
+    app_path = Path.cwd()
+    config_fpath = settings.load_user_config_if_exists(app_path)
+    config = settings.Config(config_fpath).pre_check
+    main_msgs = settings.load_messages()
+    if inputs_data.problem_type == CLASSIFICATION_KEY:
+        if inputs_data.targets_metadata['balance'] < config.data.labels_perp_min_thresh:
+            msg = main_msgs['unbalanced_labels']
+            return msg
+    elif inputs_data.problem_type == REGRESSION_KEY:
+        if inputs_data.targets_metadata['count'] == 1:
+            mas = [inputs_data.targets_metadata['max']]
+            mis = [inputs_data.targets_metadata['min']]
+            avgs = [inputs_data.targets_metadata['mean']]
+            stds = [inputs_data.targets_metadata['std']]
+        else:
+            mas = list(inputs_data.targets_metadata['max'])
+            mis = list(inputs_data.targets_metadata['min'])
+            avgs = list(inputs_data.targets_metadata['mean'])
+            stds = list(inputs_data.targets_metadata['std'])
+        for idx in range(len(mas)):
+            if utils.almost_equal(stds[idx], 0.0):
+                msg = main_msgs['targets_constant'] if len(mas) == 1 else main_msgs['target_constant'].format(idx)
+                return msg
+            elif any([utils.almost_equal(mas[idx], data_max) for data_max in config.data.normalized_data_maxs]) and \
+            any([utils.almost_equal(mis[idx], data_min) for data_min in config.data.normalized_data_mins]):
+                msg = 'everything is clear'
+                return msg
+            elif not (utils.almost_equal(stds[idx], 1.0) and utils.almost_equal(avgs[idx], 0.0)):
+                msg = main_msgs['targets_unnormalized'] if len(mas) == 1 else main_msgs['target_unnormalized'].format(idx)
+                return msg
 
-# def test_targets():
-#     '''Data used to show the message: Groundtruth Labels are unbalanced, which requires adaptive algorithms'''
-#     x_train0 = np.ones((314, 9), dtype=np.int64)
-#     y = np.array([[0],[1]])
-#     y_train0 = np.repeat(y, [1, 313], axis=0)
-#     x_test0 = np.ones((78, 9), dtype=np.int64)
-#     y_test0 = np.repeat(y, [1, 77], axis=0)
+def test_targets():
+    '''Data used to show the message: Groundtruth Labels are unbalanced, which requires adaptive algorithms'''
+    x_train0 = np.ones((314, 9), dtype=np.int64)
+    y = np.array([[0],[1]])
+    y_train0 = np.repeat(y, [1, 313], axis=0)
+    x_test0 = np.ones((78, 9), dtype=np.int64)
+    y_test0 = np.repeat(y, [1, 77], axis=0)
 
-#     '''Data used to show the message: everything is clear'''
-#     dataset = pd.read_csv('../data/auto-mpg.csv')
-#     train_dataset = dataset.sample(frac=0.8, random_state=0)
-#     test_dataset = dataset.drop(train_dataset.index)
-#     train_features = train_dataset.copy()
-#     test_features = test_dataset.copy()
-#     train_labels = train_features.pop('MPG')
-#     test_labels = test_features.pop('MPG')
-#     x_train, y_train = train_features.to_numpy(), train_labels.to_numpy().reshape(-1,1)
-#     x_test, y_test = test_features.to_numpy(), test_labels.to_numpy().reshape(-1,1)
-#     '''Data used to show the message: Outputs are constant'''
-#     x_train1 = np.ones((314, 9), dtype=np.int64)
-#     y_train1 = np.ones((314, 1), dtype=np.int64)
-#     x_test1 = np.ones((78, 9), dtype=np.int64)
-#     y_test1 = np.ones((78, 1), dtype=np.int64)
+    '''Data used to show the message: everything is clear'''
+    dataset = pd.read_csv('../data/auto-mpg.csv')
+    train_dataset = dataset.sample(frac=0.8, random_state=0)
+    test_dataset = dataset.drop(train_dataset.index)
+    train_features = train_dataset.copy()
+    test_features = test_dataset.copy()
+    train_labels = train_features.pop('MPG')
+    test_labels = test_features.pop('MPG')
+    x_train, y_train = train_features.to_numpy(), train_labels.to_numpy().reshape(-1,1)
+    x_test, y_test = test_features.to_numpy(), test_labels.to_numpy().reshape(-1,1)
+    '''Data used to show the message: Outputs are constant'''
+    x_train1 = np.ones((314, 9), dtype=np.int64)
+    y_train1 = np.ones((314, 1), dtype=np.int64)
+    x_test1 = np.ones((78, 9), dtype=np.int64)
+    y_test1 = np.ones((78, 1), dtype=np.int64)
 
-#     '''Data used to show the message: Outputs seem to be unnormalized'''
-#     x_train2 = np.random.randint(0, 10000, (314, 9), dtype=np.int64)
-#     x_test2 = np.random.randint(0, 10000, (78, 9), dtype=np.int64)
-#     y_train2 = np.random.randint(0, 10000, (314, 1), dtype=np.int64)
-#     y_test2 = np.random.randint(0, 10000, (78, 1), dtype=np.int64)
+    '''Data used to show the message: Outputs seem to be unnormalized'''
+    x_train2 = np.random.randint(0, 10000, (314, 9), dtype=np.int64)
+    x_test2 = np.random.randint(0, 10000, (78, 9), dtype=np.int64)
+    y_train2 = np.random.randint(0, 10000, (314, 1), dtype=np.int64)
+    y_test2 = np.random.randint(0, 10000, (78, 1), dtype=np.int64)
 
-#     trains = [[x_train0, y_train0, x_test0, y_test0], [x_train, y_train, x_test, y_test], [x_train1, y_train1, x_test1, y_test1], [x_train2, y_train2, x_test2, y_test2]]
-#     ok = False
-#     problem_type = CLASSIFICATION_KEY
-#     for i in range(len(trains)):
-#         data_loader_under_test = data.DataLoaderFromArrays(trains[i][0], trains[i][1], problem_type=problem_type, shuffle=True, one_hot=False, target_scaling=ok)
-#         test_data_loader = data.DataLoaderFromArrays(trains[i][2], trains[i][3], problem_type=problem_type, shuffle=True, one_hot=False, target_scaling=ok)
-#         data_to_test = interfaceData.build_data_interface(data_loader_under_test, test_data_loader, homogeneous=True)
-#         inputs_data = InputData(data_to_test, problem_type)
-#         if i == 0:
-#             assert pre_check_targets(inputs_data) == 'Groundtruth Labels are unbalanced, which requires adaptive algorithms'
-#             problem_type = REGRESSION_KEY
-#             ok = True
-#         if i == 1:
-#             assert pre_check_targets(inputs_data) == 'everything is clear'
-#             ok = False
-#         if i == 2:
-#             assert pre_check_targets(inputs_data) == 'Outputs are constant'
-#         if i == 3:
-#             assert pre_check_targets(inputs_data) == 'Outputs seem to be unnormalized'
+    trains = [[x_train0, y_train0, x_test0, y_test0], [x_train, y_train, x_test, y_test], [x_train1, y_train1, x_test1, y_test1], [x_train2, y_train2, x_test2, y_test2]]
+    ok = False
+    problem_type = CLASSIFICATION_KEY
+    for i in range(len(trains)):
+        data_loader_under_test = data.DataLoaderFromArrays(trains[i][0], trains[i][1], problem_type=problem_type, shuffle=True, one_hot=False, target_scaling=ok)
+        test_data_loader = data.DataLoaderFromArrays(trains[i][2], trains[i][3], problem_type=problem_type, shuffle=True, one_hot=False, target_scaling=ok)
+        data_to_test = interfaceData.build_data_interface(data_loader_under_test, test_data_loader, homogeneous=True)
+        inputs_data = InputData(data_to_test, problem_type)
+        if i == 0:
+            assert pre_check_targets(inputs_data) == 'Groundtruth Labels are unbalanced, which requires adaptive algorithms'
+            problem_type = REGRESSION_KEY
+            ok = True
+        if i == 1:
+            assert pre_check_targets(inputs_data) == 'everything is clear'
+            ok = False
+        if i == 2:
+            assert pre_check_targets(inputs_data) == 'Outputs are constant'
+        if i == 3:
+            assert pre_check_targets(inputs_data) == 'Outputs seem to be unnormalized'
 
 
 
