@@ -440,7 +440,7 @@
 
 #     real_loss3 = np.array([[1.548]])
 #     fake_loss3 = np.array([2.4])
-#     real_acc3 = [0.8]
+#     real_acc3 = [0.8] 
 #     problem_type3 = 'classification'
 #     assert pre_check_fitting_data_capability(real_loss3, real_acc3, fake_loss3, problem_type3) == 'The DNN training is unable to fit properly a single batch of data'
 
