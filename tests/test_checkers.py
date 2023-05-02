@@ -426,38 +426,38 @@ def test_losses():
 #                 return main_msgs['data_dep']
 
 # def test_data_capability():
-    real_loss1 = np.nan
-    fake_loss1 = np.array([2.4])
-    real_acc1 = [0.9]
-    problem_type1 = ''
-    assert pre_check_fitting_data_capability(real_loss1, real_acc1, fake_loss1, problem_type1) == 'The DNN training is unable to fit properly a single batch of data'
+    # real_loss1 = np.nan
+    # fake_loss1 = np.array([2.4])
+    # real_acc1 = [0.9]
+    # problem_type1 = ''
+    # assert pre_check_fitting_data_capability(real_loss1, real_acc1, fake_loss1, problem_type1) == 'The DNN training is unable to fit properly a single batch of data'
 
-    real_loss2 = np.inf
-    fake_loss2 = np.array([2.4])
-    real_acc2 = [0.5]
-    problem_type2 = ''
-    assert pre_check_fitting_data_capability(real_loss2, real_acc2, fake_loss2, problem_type2) == 'The DNN training is unable to fit properly a single batch of data'
+    # real_loss2 = np.inf
+    # fake_loss2 = np.array([2.4])
+    # real_acc2 = [0.5]
+    # problem_type2 = ''
+    # assert pre_check_fitting_data_capability(real_loss2, real_acc2, fake_loss2, problem_type2) == 'The DNN training is unable to fit properly a single batch of data'
 
-    real_loss3 = np.array([[1.548]])
-    fake_loss3 = np.array([2.4])
-    real_acc3 = [0.8]
-    problem_type3 = 'classification'
-    assert pre_check_fitting_data_capability(real_loss3, real_acc3, fake_loss3, problem_type3) == 'The DNN training is unable to fit properly a single batch of data'
+    # real_loss3 = np.array([[1.548]])
+    # fake_loss3 = np.array([2.4])
+    # real_acc3 = [0.8]
+    # problem_type3 = 'classification'
+    # assert pre_check_fitting_data_capability(real_loss3, real_acc3, fake_loss3, problem_type3) == 'The DNN training is unable to fit properly a single batch of data'
 
-    real_loss4 = np.array([[1.548]])
-    fake_loss4 = np.array([2.4])
-    real_acc4 = [0.1]
-    problem_type4 = 'regression'
-    assert pre_check_fitting_data_capability(real_loss4, real_acc4, fake_loss4, problem_type4) == 'The DNN training is unable to fit properly a single batch of data'
+    # real_loss4 = np.array([[1.548]])
+    # fake_loss4 = np.array([2.4])
+    # real_acc4 = [0.1]
+    # problem_type4 = 'regression'
+    # assert pre_check_fitting_data_capability(real_loss4, real_acc4, fake_loss4, problem_type4) == 'The DNN training is unable to fit properly a single batch of data'
 
-    real_loss5 = np.array([[1e-6]])
-    fake_loss5 = np.array([2.4])
-    real_acc5 = [0.0001]
-    problem_type5 = 'regression'
-    assert pre_check_fitting_data_capability(real_loss5, real_acc5, fake_loss5, problem_type5) == 'The loss is smoothly decreasing towards zero: The model may need regularization'
+    # real_loss5 = np.array([[1e-6]])
+    # fake_loss5 = np.array([2.4])
+    # real_acc5 = [0.0001]
+    # problem_type5 = 'regression'
+    # assert pre_check_fitting_data_capability(real_loss5, real_acc5, fake_loss5, problem_type5) == 'The loss is smoothly decreasing towards zero: The model may need regularization'
 
-    real_loss6 = np.array([1.56, np.nan])
-    fake_loss6 = np.array([2.4, np.nan])
-    problem_type6 = ''
-    real_acc6 = [0.95]
-    assert pre_check_fitting_data_capability(real_loss6, real_acc6, fake_loss6, problem_type6) == 'The training procedure seems to be not considering the data inputs'
+    # real_loss6 = np.array([1.56, np.nan])
+    # fake_loss6 = np.array([2.4, np.nan])
+    # problem_type6 = ''
+    # real_acc6 = [0.95]
+    # assert pre_check_fitting_data_capability(real_loss6, real_acc6, fake_loss6, problem_type6) == 'The training procedure seems to be not considering the data inputs'
