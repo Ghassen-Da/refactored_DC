@@ -128,7 +128,7 @@ def pre_check_targets(inputs_data):
             elif not (utils.almost_equal(stds[idx], 1.0) and utils.almost_equal(avgs[idx], 0.0)):
                 msg = main_msgs['targets_unnormalized'] if len(mas) == 1 else main_msgs['target_unnormalized'].format(idx)
                 return msg
-
+ 
 def test_targets():
     '''Data used to show the message: Groundtruth Labels are unbalanced, which requires adaptive algorithms'''
     x_train0 = np.ones((314, 9), dtype=np.int64)
