@@ -10,12 +10,12 @@ print('hii')
 print(os.getcwd())
 print(os.listdir())
 import data as data
-import _settings
 import metrics as metrics
 import utils as utils
 from utils import readable
 from metadata import DNNState, InputData
 import interfaceData as interfaceData
+import _settings
 
 from _settings import CLASSIFICATION_KEY, REGRESSION_KEY
 
