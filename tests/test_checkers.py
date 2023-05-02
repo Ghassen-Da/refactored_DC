@@ -3,6 +3,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import tensorflow as tf
+import sys
+sys.path.append('../')
 import settings as settings
 import data as data
 import metrics as metrics
