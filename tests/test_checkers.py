@@ -3,16 +3,12 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import tensorflow as tf
-import sys
-sys.path.append('../..')
-import os
-print('hii')
-print(os.getcwd())
-print(os.listdir())
+# import sys
+# sys.path.append('../..')
 import data as data
 import utils as utils
 from utils import readable
-import metrics as metrics
+import refactored_DC.metrics as metrics
 from metadata import DNNState, InputData
 import interfaceData as interfaceData
 import _settings
