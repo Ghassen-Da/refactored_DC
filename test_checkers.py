@@ -3,7 +3,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import tensorflow as tf
-from settings import settings
+import settings as settings
 import data as data
 import metrics as metrics
 import utils as utils
