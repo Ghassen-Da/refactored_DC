@@ -35,8 +35,13 @@ jobs:
         pip install pytest-cov
         pytest --cov .
 
+    - name: Upload coverage reports to Codecov
+      run: |
+        curl -Os https://uploader.codecov.io/latest/linux/codecov
+        chmod +x codecov
+        ./codecov
 
-    - name: Use Codecov to track coverage
-      uses: codecov/codecov-action@v2
-      with:
-        files: ./coverage.xml   # coverage report
+    # - name: Use Codecov to track coverage
+    #   uses: codecov/codecov-action@v2
+    #   with:
+    #     files: ./coverage.xml   # coverage report
