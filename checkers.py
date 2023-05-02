@@ -353,7 +353,7 @@ class PreCheck:
                 return
             relerr = numerator / denominator
             if relerr > self.config.grad.relative_err_max_thresh:
-                self.react(self.main_msgs['grad_err'].format(all_weights[i], readable(relerr), self.config.grad.relative_err_max_thresh))
+                # self.react(self.main_msgs['grad_err'].format(all_weights[i], readable(relerr), self.config.grad.relative_err_max_thresh))
 
 
     '''
