@@ -5,7 +5,7 @@ import pandas as pd
 import tensorflow as tf
 import sys
 sys.path.append('../')
-import settings
+from settings import settings
 import data as data
 import metrics as metrics
 import utils as utils
