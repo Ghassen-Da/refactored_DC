@@ -3,8 +3,8 @@ import numpy as np
 import tensorflow as tf
 import scipy.stats as stats
 from tensorflow.python.training.basic_session_run_hooks import _as_graph_element
-from refactored_DC.settings import CLASSIFICATION_KEY, REGRESSION_KEY
-import refactored_DC.utils as utils
+from settings import CLASSIFICATION_KEY, REGRESSION_KEY
+import utils as utils
 
 
 class InputData:
