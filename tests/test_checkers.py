@@ -4,15 +4,15 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 
-from ..metadata import DNNState, InputData
-from ..utils import readable
-from ..settings import CLASSIFICATION_KEY, REGRESSION_KEY
+from refactored_DC.metadata import DNNState, InputData
+from refactored_DC.utils import readable
 import data as data
-# import ..metrics as metrics
-# import refactored_DC.utils as utils
-# import refactored_DC.interfaceData as interfaceData
-# import refactored_DC.settings as settings
+import refactored_DC.metrics as metrics
+import refactored_DC.utils as utils
+import refactored_DC.interfaceData as interfaceData
+import refactored_DC.settings as settings
 
+from refactored_DC.settings import CLASSIFICATION_KEY, REGRESSION_KEY
 
 
 def pre_check_features(inputs_data):
