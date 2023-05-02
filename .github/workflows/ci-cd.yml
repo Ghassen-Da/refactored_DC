@@ -1,0 +1,18 @@
+name: ci-cd
+
+on: [push, pull_request]
+
+jobs:
+  ci:
+    # Set up operating system
+    runs-on: ubuntu-latest
+
+    # Define job steps
+    steps:
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+
+    - name: Check-out repository
+      uses: actions/checkout@v2
