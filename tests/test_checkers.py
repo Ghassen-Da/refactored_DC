@@ -315,7 +315,7 @@ def test_biases():
     inputs_data2 = InputData(data_to_test, 'classification')
     initial_biases4 = {'conv2d/bias:0': np.ones((64,1))}
     assert pre_check_biases(initial_biases4, inputs_data2) == '''It is recommended to choose null biases (zeros)'''
-
+ 
 
 def pre_check_loss(losses, inputs_data, initial_loss):
     app_path = Path.cwd()
