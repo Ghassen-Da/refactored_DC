@@ -1,6 +1,6 @@
-from  ...refactored_DC.metrics import are_significantly_different
+from ... import metrics
 
-
+print(metrics)
 # content of test_sample.py
 def func(x):
     return x + 1
