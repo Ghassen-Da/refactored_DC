@@ -14,7 +14,7 @@ sys.path.insert(0, parentdir)
 
 
 import metrics
-from metadata import DNNState, InputData
+from metadata import InputData
 from utils import readable
 import data as data
 import utils
@@ -138,6 +138,7 @@ def test_targets():
     y_test0 = np.repeat(y, [1, 77], axis=0)
 
     '''Data used to show the message: everything is clear'''
+    sys.path.insert(0, currentdir)
     dataset = pd.read_csv('data/auto-mpg.csv')
     train_dataset = dataset.sample(frac=0.8, random_state=0)
     test_dataset = dataset.drop(train_dataset.index)
