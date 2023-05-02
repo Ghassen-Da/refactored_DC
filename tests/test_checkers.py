@@ -10,9 +10,9 @@ print('hii')
 print(os.getcwd())
 print(os.listdir())
 import data as data
-import metrics as metrics
 import utils as utils
 from utils import readable
+import metrics as metrics
 from metadata import DNNState, InputData
 import interfaceData as interfaceData
 import _settings
