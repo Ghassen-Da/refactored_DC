@@ -20,7 +20,7 @@ def pre_check_features(inputs_data):
     config = settings.Config(config_fpath).pre_check
     main_msgs = settings.load_messages()
 
-
+ 
     if inputs_data.homogeneous:
         mas = [inputs_data.features_metadata['max']]
         mis = [inputs_data.features_metadata['min']]
