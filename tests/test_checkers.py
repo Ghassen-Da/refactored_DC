@@ -4,10 +4,10 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 
+from refactored_DC import metrics
 from refactored_DC.metadata import DNNState, InputData
 from refactored_DC.utils import readable
 import data as data
-import refactored_DC.metrics as metrics
 import refactored_DC.utils as utils
 import refactored_DC.interfaceData as interfaceData
 import refactored_DC.settings as settings
