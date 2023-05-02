@@ -5,6 +5,9 @@ import pandas as pd
 import tensorflow as tf
 import sys
 sys.path.append('../')
+import os
+print('hii')
+print(os.getcwd())
 import settings
 import data as data
 import metrics as metrics
