@@ -41,7 +41,7 @@ jobs:
     #     chmod +x codecov
     #     ./codecov
 
-    - name: Run tests and collect coverage
+    - name: Run tests and collect coverage 
       run: |
         pip install pytest-cov
         pytest --cov --cov-report=xml
