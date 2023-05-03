@@ -4,7 +4,6 @@ from itertools import groupby
 from functools import reduce
 from operator import itemgetter
 from scipy.stats import mannwhitneyu
- 
 
 def are_significantly_different(sample_1, sample_2, alpha = 0.05):
   stat, p = mannwhitneyu(sample_1, sample_2)
