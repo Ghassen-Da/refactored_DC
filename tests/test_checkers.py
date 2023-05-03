@@ -225,17 +225,17 @@ def pre_check_weights(weight_name, weight_array, activation):
 # print(pre_check_weights(name, array, activation))
 
  
-# def test_weights():
-#     names = ['conv2_d/kernel:0', 'conv2_d/kernel:0', 'dense/kernel:0', 'dense/kernel:0', 'dense/kernel:0', 'dense/kernel:0', 'conv2_d/kernel:0']
-#     arrays = [np.array([1]), np.ones((5,5,1,32), dtype=np.int64),
-#               np.random.randint(1,5, (64,1), dtype = np.int64), np.random.randint(1,5, (64,1), dtype = np.int64),
-#               np.random.randint(1,5, (64,1), dtype = np.int64), np.random.randint(1,5, (64,1), dtype = np.int64), np.random.rand(64,1)]
-#     activations = ['relu', 'relu', 'relu', 'tanh', 'sigmoid', 'softmax', 'tanh']
-#     messages = ['ignored because of the shape', 'Poor initialization (unbreaking symmetry) of weight', 'It is recommended to choose He initialization for weight',
-#                 'It is recommended to choose Glorot/Xavier initialization for weight', 'It is recommended to choose Lecun initialization for weight',
-#                 'It is recommended to choose a well-known initialization for weight', 'everything is clear']
-#     for i in range(len(names)):
-#         assert messages[i] in pre_check_weights(names[i], arrays[i], activations[i])
+def test_weights():
+    names = ['conv2_d/kernel:0', 'conv2_d/kernel:0', 'dense/kernel:0', 'dense/kernel:0', 'dense/kernel:0', 'dense/kernel:0', 'conv2_d/kernel:0']
+    arrays = [np.array([1]), np.ones((5,5,1,32), dtype=np.int64),
+              np.random.randint(1,5, (64,1), dtype = np.int64), np.random.randint(1,5, (64,1), dtype = np.int64),
+              np.random.randint(1,5, (64,1), dtype = np.int64), np.random.randint(1,5, (64,1), dtype = np.int64), np.random.rand(64,1)]
+    activations = ['relu', 'relu', 'relu', 'tanh', 'sigmoid', 'softmax', 'tanh']
+    messages = ['ignored because of the shape', 'Poor initialization (unbreaking symmetry) of weight', 'It is recommended to choose He initialization for weight',
+                'It is recommended to choose Glorot/Xavier initialization for weight', 'It is recommended to choose Lecun initialization for weight',
+                'It is recommended to choose a well-known initialization for weight', 'everything is clear']
+    for i in range(len(names)):
+        assert messages[i] in pre_check_weights(names[i], arrays[i], activations[i])
 
 
 def pre_check_biases(initial_biases, inputs_data):
