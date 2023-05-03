@@ -224,7 +224,7 @@ def pre_check_weights(weight_name, weight_array, activation):
 # activation = 'tanh'
 # print(pre_check_weights(name, array, activation))
 
-
+ 
 def test_weights():
     names = ['conv2_d/kernel:0', 'conv2_d/kernel:0', 'dense/kernel:0', 'dense/kernel:0', 'dense/kernel:0', 'dense/kernel:0', 'conv2_d/kernel:0']
     arrays = [np.array([1]), np.ones((5,5,1,32), dtype=np.int64),
