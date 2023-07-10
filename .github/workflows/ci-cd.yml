@@ -66,6 +66,9 @@ jobs:
     - name: Install package
       run: poetry install
 
+    - name: Install semantic-release
+      run: poetry add python-semantic-release    
+
     - name: Use Python Semantic Release to prepare release
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
